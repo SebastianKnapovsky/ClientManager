@@ -1,0 +1,21 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build
+bin/
+obj/
+*.dll
+*.exe
+*.log
+
+# Tests
+TestResults/
+
+# Others
+*.db
+*.DS_Store
+*.swp
+*.bak
+*.tmp

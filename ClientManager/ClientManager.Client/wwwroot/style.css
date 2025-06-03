@@ -1,0 +1,32 @@
+﻿body {
+    font-family: sans-serif;
+    padding: 2rem;
+    background: #f4f4f4;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+form, table {
+    margin-top: 1rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+}
+
+input, textarea {
+    display: block;
+    margin: 5px 0;
+    padding: 6px;
+    width: 100%;
+    max-width: 400px;
+}
