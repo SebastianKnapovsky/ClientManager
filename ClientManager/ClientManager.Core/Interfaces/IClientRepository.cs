@@ -1,4 +1,5 @@
-﻿using ClientManager.Core.Models;
+﻿using ClientManager.Core.DTOs;
+using ClientManager.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace ClientManager.Core.Interfaces
         Task<IEnumerable<Client>> GetAllAsync();
         Task<Client?> GetByIdAsync(Guid id);
         Task AddAsync(Client client);
-        Task UpdateAsync(Client client);
+        Task UpdateAsync(ClientDto dto);
         Task DeleteAsync(Guid id);
     }
 }

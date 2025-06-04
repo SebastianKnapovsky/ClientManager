@@ -49,7 +49,7 @@ namespace ClientManager.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateClientDto dto)
+        public async Task<IActionResult> Update(Guid id, [FromBody] ClientDto dto)
         {
             if (id != dto.Id)
             {

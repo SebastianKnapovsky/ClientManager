@@ -35,13 +35,9 @@ namespace ClientManager.Infrastructure.Services
             return _mapper.Map<ClientDto>(client);
         }
 
-        public async Task UpdateClientAsync(UpdateClientDto dto)
+        public async Task UpdateClientAsync(ClientDto dto)
         {
-            var existingClient = await _repository.GetByIdAsync(dto.Id)
-                                 ?? throw new KeyNotFoundException($"Client with ID {dto.Id} not found.");
-
-            _mapper.Map(dto, existingClient);
-            await _repository.UpdateAsync(existingClient);
+            await _repository.UpdateAsync(dto);
         }
 
         public async Task DeleteClientAsync(Guid id)

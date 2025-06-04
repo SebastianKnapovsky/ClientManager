@@ -1,7 +1,9 @@
-﻿using ClientManager.Core.Interfaces;
+﻿using ClientManager.Core.DTOs;
+using ClientManager.Core.Interfaces;
 using ClientManager.Core.Models;
 using ClientManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace ClientManager.Infrastructure.Repositories
 {
@@ -34,36 +36,54 @@ namespace ClientManager.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Client client)
+        public async Task UpdateAsync(ClientDto dto)
         {
             var existingClient = await _context.Clients
                 .Include(c => c.AdditionalFields)
-                .FirstOrDefaultAsync(c => c.Id == client.Id);
+                .FirstOrDefaultAsync(c => c.Id == dto.Id);
 
-            if (existingClient is null)
-                return;
+            if (existingClient == null)
+                throw new Exception("Client not found");
 
-            existingClient.Name = client.Name;
-            existingClient.Address = client.Address;
-            existingClient.NIP = client.NIP;
+            existingClient.Name = dto.Name;
+            existingClient.Address = dto.Address;
+            existingClient.NIP = dto.NIP;
 
-            if (existingClient.AdditionalFields != null && existingClient.AdditionalFields.Any())
+            var incoming = dto.AdditionalFields ?? new();
+
+            var incomingIds = incoming.Where(f => f.Id != 0).Select(f => f.Id).ToList();
+            var toRemove = existingClient.AdditionalFields
+                .Where(f => !incomingIds.Contains(f.Id))
+                .ToList();
+
+            _context.ClientAdditionalFields.RemoveRange(toRemove);
+
+            foreach (var field in incoming.Where(f => f.Id != 0))
             {
-                _context.ClientAdditionalFields.RemoveRange(existingClient.AdditionalFields);
+                var existingField = existingClient.AdditionalFields
+                    .FirstOrDefault(f => f.Id == field.Id);
+
+                if (existingField != null)
+                {
+                    existingField.NameField = field.NameField;
+                    existingField.Value = field.Value;
+                }
             }
 
-            existingClient.AdditionalFields = client.AdditionalFields?.Select(f => new ClientAdditionalField
-            {
-                NameField = f.NameField,
-                Value = f.Value,
-                ClientId = existingClient.Id
-            }).ToList();
+            var newFields = incoming
+                .Where(f => f.Id == 0)
+                .Select(f => new ClientAdditionalField
+                {
+                    NameField = f.NameField,
+                    Value = f.Value,
+                    ClientId = existingClient.Id
+                })
+                .ToList();
 
-            _context.Clients.Update(existingClient);
+            existingClient.AdditionalFields.AddRange(newFields);
 
             await _context.SaveChangesAsync();
         }
-
 
         public async Task DeleteAsync(Guid id)
         {
