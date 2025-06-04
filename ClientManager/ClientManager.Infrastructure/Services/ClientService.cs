@@ -1,64 +1,59 @@
-﻿using ClientManager.Core.DTOs;
+﻿using AutoMapper;
+using ClientManager.Core.DTOs;
 using ClientManager.Core.Interfaces;
 using ClientManager.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClientManager.Infrastructure.Services
 {
     public class ClientService : IClientService
     {
         private readonly IClientRepository _repository;
+        private readonly IMapper _mapper;
 
-        public ClientService(IClientRepository repository)
+        public ClientService(IClientRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        public async Task<IEnumerable<ClientDto>> GetAllClientsAsync()
         {
-            return await _repository.GetAllAsync();
+            var clients = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<ClientDto>>(clients);
         }
 
-        public async Task<Client?> GetClientByIdAsync(Guid id)
+        public async Task<ClientDto?> GetClientByIdAsync(Guid id)
         {
-            return await _repository.GetByIdAsync(id);
+            var client = await _repository.GetByIdAsync(id);
+            return client == null ? null : _mapper.Map<ClientDto>(client);
         }
 
-        public async Task<Client> CreateClientAsync(ClientDto dto)
+        public async Task<ClientDto> CreateClientAsync(ClientDto dto)
         {
-            var client = new Client
-            {
-                Name = dto.Name,
-                Address = dto.Address,
-                NIP = dto.NIP,
-                AdditionalFields = dto.AdditionalFields
-            };
-
+            var client = _mapper.Map<Client>(dto);
             await _repository.AddAsync(client);
-            return client;
+            return _mapper.Map<ClientDto>(client);
         }
 
         public async Task UpdateClientAsync(UpdateClientDto dto)
         {
-            var updated = new Client
-            {
-                Id = dto.Id,
-                Name = dto.Name,
-                Address = dto.Address,
-                NIP = dto.NIP,
-                AdditionalFields = dto.AdditionalFields
-            };
+            var existingClient = await _repository.GetByIdAsync(dto.Id)
+                                 ?? throw new KeyNotFoundException($"Client with ID {dto.Id} not found.");
 
-            await _repository.UpdateAsync(updated);
+            _mapper.Map(dto, existingClient);
+            await _repository.UpdateAsync(existingClient);
         }
 
         public async Task DeleteClientAsync(Guid id)
         {
             await _repository.DeleteAsync(id);
         }
+
+        #region Report
+        public async Task<IEnumerable<Client>> GetAllClientsForReportAsync()
+        {
+            return await _repository.GetAllAsync();
+        }
+        #endregion
     }
 }

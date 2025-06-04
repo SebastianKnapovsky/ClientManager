@@ -1,8 +1,8 @@
 ﻿using ClientManager.Core.Interfaces;
 using ClientManager.Core.Models;
 using QuestPDF.Fluent;
-using QuestPDF.Infrastructure;
 using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace ClientManager.Infrastructure.Services
 {
@@ -10,7 +10,7 @@ namespace ClientManager.Infrastructure.Services
     {
         public byte[] Generate(IEnumerable<Client> clients)
         {
-            var clientList = clients.ToList(); 
+            var clientList = clients?.ToList() ?? new List<Client>();
 
             var document = Document.Create(container =>
             {
@@ -43,15 +43,22 @@ namespace ClientManager.Infrastructure.Services
 
                         foreach (var client in clientList)
                         {
-                            table.Cell().Element(CellStyle).Text(client.Name);
-                            table.Cell().Element(CellStyle).Text(client.Address);
-                            table.Cell().Element(CellStyle).Text(client.NIP);
+                            table.Cell().Element(CellStyle).Text(client.Name ?? string.Empty);
+                            table.Cell().Element(CellStyle).Text(client.Address ?? string.Empty);
+                            table.Cell().Element(CellStyle).Text(client.NIP ?? string.Empty);
 
-                            string additional = client.AdditionalFields != null && client.AdditionalFields.Count > 0
-                                ? string.Join("\n", client.AdditionalFields.Select(kv => $"{kv.Key}: {kv.Value}"))
-                                : "-";
+                            string additionalText = "-";
+                            if (client.AdditionalFields != null && client.AdditionalFields.Any())
+                            {
+                                additionalText = string.Join("\n", client.AdditionalFields.Select(f =>
+                                {
+                                    var name = f?.NameField ?? string.Empty;
+                                    var value = f?.Value ?? string.Empty;
+                                    return $"{name}: {value}";
+                                }));
+                            }
 
-                            table.Cell().Element(CellStyle).Text(additional);
+                            table.Cell().Element(CellStyle).Text(additionalText);
                         }
 
                         static IContainer CellStyle(IContainer container) =>

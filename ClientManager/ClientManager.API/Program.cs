@@ -4,8 +4,11 @@ using ClientManager.Infrastructure.Data;
 using ClientManager.Infrastructure.Repositories;
 using ClientManager.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 // Add services to the container.
 
@@ -24,11 +27,13 @@ builder.Services.AddScoped<IPdfReportGenerator, PdfReportGenerator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient",
         policy => policy
-            .WithOrigins("http://localhost:5500") 
+            .WithOrigins("http://localhost:5500")
             .AllowAnyHeader()
             .AllowAnyMethod());
 });

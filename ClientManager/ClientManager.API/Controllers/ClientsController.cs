@@ -1,6 +1,5 @@
 ﻿using ClientManager.Core.DTOs;
 using ClientManager.Core.Interfaces;
-using ClientManager.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClientManager.API.Controllers
@@ -19,7 +18,7 @@ namespace ClientManager.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Client>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ClientDto>>> GetAll()
         {
             _logger.LogInformation("Fetching all clients");
             var clients = await _clientService.GetAllClientsAsync();
@@ -27,9 +26,10 @@ namespace ClientManager.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> Get(Guid id)
+        public async Task<ActionResult<ClientDto>> Get(Guid id)
         {
             var client = await _clientService.GetClientByIdAsync(id);
+
             if (client == null)
             {
                 _logger.LogWarning("Client with ID {Id} not found", id);
@@ -40,11 +40,12 @@ namespace ClientManager.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Client>> Create([FromBody] ClientDto dto)
+        public async Task<ActionResult<ClientDto>> Create([FromBody] ClientDto dto)
         {
-            var client = await _clientService.CreateClientAsync(dto);
-            _logger.LogInformation("Created new client with ID {Id}", client.Id);
-            return CreatedAtAction(nameof(Get), new { id = client.Id }, client);
+            var createdClient = await _clientService.CreateClientAsync(dto);
+
+            _logger.LogInformation("Created new client with ID {Id}", createdClient.Id);
+            return CreatedAtAction(nameof(Get), new { id = createdClient.Id }, createdClient);
         }
 
         [HttpPut("{id}")]
@@ -58,6 +59,7 @@ namespace ClientManager.API.Controllers
 
             await _clientService.UpdateClientAsync(dto);
             _logger.LogInformation("Updated client with ID {Id}", id);
+
             return NoContent();
         }
 
@@ -66,6 +68,7 @@ namespace ClientManager.API.Controllers
         {
             await _clientService.DeleteClientAsync(id);
             _logger.LogInformation("Deleted client with ID {Id}", id);
+
             return NoContent();
         }
     }

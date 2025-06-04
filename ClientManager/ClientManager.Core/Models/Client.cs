@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClientManager.Core.Models
+﻿namespace ClientManager.Core.Models
 {
     public class Client
     {
@@ -13,6 +7,6 @@ namespace ClientManager.Core.Models
         public string Address { get; set; } = string.Empty;
         public string NIP { get; set; } = string.Empty;
 
-        public Dictionary<string, string>? AdditionalFields { get; set; }
+        public List<ClientAdditionalField>? AdditionalFields { get; set; }
     }
 }

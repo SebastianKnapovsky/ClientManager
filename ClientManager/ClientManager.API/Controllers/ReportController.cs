@@ -1,5 +1,4 @@
 ﻿using ClientManager.Core.Interfaces;
-using ClientManager.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClientManager.API.Controllers
@@ -19,12 +18,12 @@ namespace ClientManager.API.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("download")]
         public async Task<IActionResult> Get()
         {
             _logger.LogInformation("Generating client report PDF");
 
-            var clients = await _clientService.GetAllClientsAsync();
+            var clients = await _clientService.GetAllClientsForReportAsync();
             var pdfBytes = _pdfGenerator.Generate(clients);
 
             return File(pdfBytes, "application/pdf", "ClientReport.pdf");

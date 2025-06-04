@@ -13,6 +13,18 @@ obj/
 # Tests
 TestResults/
 
+# EF Core Migrations
+**/Migrations/
+**/migrations/
+
+# Local SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# EF Core snapshot file (if present)
+**/*ModelSnapshot.cs
+
 # Others
 *.db
 *.DS_Store
