@@ -7,7 +7,7 @@ namespace ClientManager.Core.Interfaces
     {
         Task<IEnumerable<ClientDto>> GetAllClientsAsync();
         Task<ClientDto?> GetClientByIdAsync(Guid id);
-        Task<ClientDto> CreateClientAsync(ClientDto dto);
+        Task<ClientDto> CreateClientAsync(CreateClientDto dto);
         Task UpdateClientAsync(ClientDto dto);
         Task DeleteClientAsync(Guid id);
         Task<IEnumerable<Client>> GetAllClientsForReportAsync();

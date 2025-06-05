@@ -40,7 +40,7 @@ namespace ClientManager.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ClientDto>> Create([FromBody] ClientDto dto)
+        public async Task<ActionResult<ClientDto>> Create([FromBody] CreateClientDto dto)
         {
             var createdClient = await _clientService.CreateClientAsync(dto);
 

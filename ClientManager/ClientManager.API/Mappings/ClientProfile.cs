@@ -9,11 +9,8 @@ namespace ClientManager.API.Mappings
         public ClientProfile()
         {
             CreateMap<Client, ClientDto>().ReverseMap();
-
+            CreateMap<CreateClientDto, Client>();
             CreateMap<ClientAdditionalField, ClientAdditionalFieldDto>().ReverseMap();
-
-            CreateMap<ClientDto, Client>()
-                .ForMember(dest => dest.AdditionalFields, opt => opt.Ignore());
         }
     }
 }

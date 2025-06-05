@@ -1,32 +1,92 @@
 ﻿body {
-    font-family: sans-serif;
-    padding: 2rem;
-    background: #f4f4f4;
-}
-
-h1, h2 {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+    background-color: #f9f9f9;
     color: #333;
 }
 
-form, table {
-    margin-top: 1rem;
+h1 {
+    text-align: center;
+    color: #007acc;
+}
+h2 {
+    text-align: center;
+    margin-top: 40px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-th, td {
-    border: 1px solid #ccc;
+input[type="text"] {
     padding: 8px;
+    margin: 5px 0;
+    width: calc(100% - 20px);
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-input, textarea {
-    display: block;
-    margin: 5px 0;
-    padding: 6px;
-    width: 100%;
-    max-width: 400px;
+button {
+    background-color: #007acc;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    margin-top: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
 }
+
+    button:hover {
+        background-color: #005f99;
+    }
+
+#additionalFields {
+    margin-top: 10px;
+}
+
+.field-pair {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+    .field-pair input {
+        flex: 1;
+    }
+
+.client-item {
+    background-color: #fff;
+    padding: 15px;
+    border-left: 4px solid #007acc;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+    .client-item button {
+        margin-right: 10px;
+    }
+
+#clientList {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#generateReportBtn {
+    display: block;
+    margin: 20px auto;
+    background-color: #28a745;
+}
+
+    #generateReportBtn:hover {
+        background-color: #1e7e34;
+    }

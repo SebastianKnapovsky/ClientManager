@@ -28,7 +28,7 @@ namespace ClientManager.Infrastructure.Services
             return client == null ? null : _mapper.Map<ClientDto>(client);
         }
 
-        public async Task<ClientDto> CreateClientAsync(ClientDto dto)
+        public async Task<ClientDto> CreateClientAsync(CreateClientDto dto)
         {
             var client = _mapper.Map<Client>(dto);
             await _repository.AddAsync(client);
@@ -37,7 +37,8 @@ namespace ClientManager.Infrastructure.Services
 
         public async Task UpdateClientAsync(ClientDto dto)
         {
-            await _repository.UpdateAsync(dto);
+            var client = _mapper.Map<Client>(dto);
+            await _repository.UpdateAsync(client);
         }
 
         public async Task DeleteClientAsync(Guid id)

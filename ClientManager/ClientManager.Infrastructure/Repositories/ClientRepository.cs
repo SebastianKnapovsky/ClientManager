@@ -1,9 +1,7 @@
-﻿using ClientManager.Core.DTOs;
-using ClientManager.Core.Interfaces;
+﻿using ClientManager.Core.Interfaces;
 using ClientManager.Core.Models;
 using ClientManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace ClientManager.Infrastructure.Repositories
 {
@@ -36,20 +34,20 @@ namespace ClientManager.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(ClientDto dto)
+        public async Task UpdateAsync(Client client)
         {
             var existingClient = await _context.Clients
                 .Include(c => c.AdditionalFields)
-                .FirstOrDefaultAsync(c => c.Id == dto.Id);
+                .FirstOrDefaultAsync(c => c.Id == client.Id);
 
             if (existingClient == null)
                 throw new Exception("Client not found");
 
-            existingClient.Name = dto.Name;
-            existingClient.Address = dto.Address;
-            existingClient.NIP = dto.NIP;
+            existingClient.Name = client.Name;
+            existingClient.Address = client.Address;
+            existingClient.NIP = client.NIP;
 
-            var incoming = dto.AdditionalFields ?? new();
+            var incoming = client.AdditionalFields ?? new();
 
             var incomingIds = incoming.Where(f => f.Id != 0).Select(f => f.Id).ToList();
             var toRemove = existingClient.AdditionalFields

@@ -31,14 +31,19 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowClient",
-        policy => policy
-            .WithOrigins("http://localhost:5500")
-            .AllowAnyHeader()
-            .AllowAnyMethod());
+    options.AddPolicy("AllowClient", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5003") // port Twojego frontu
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
 
+
 var app = builder.Build();
+
+app.UseCors("AllowClient");
 
 // Middleware
 app.UseMiddleware<ErrorHandlingMiddleware>();
