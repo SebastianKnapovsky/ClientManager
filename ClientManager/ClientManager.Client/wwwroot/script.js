@@ -1,5 +1,9 @@
-﻿const apiUrl = 'https://localhost:5001/api/Clients';
-const reportUrl = 'https://localhost:5001/api/Report/download';
+﻿const base = location.hostname === "localhost"
+    ? "http://localhost:5001"
+    : "http://host.docker.internal:5001";
+
+const apiUrl = `${base}/api/Clients`;
+const reportUrl = `${base}/api/Report/download`;
 
 document.addEventListener('DOMContentLoaded', () => {
     loadClients();

@@ -1,0 +1,19 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ClientManager.API/Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5001
+    volumes:
+      - ./ClientManager.API/Data:/app/Data
+
+  client:
+    build:
+      context: .
+      dockerfile: ClientManager.Client/Dockerfile
+    ports:
+      - "5003:80"

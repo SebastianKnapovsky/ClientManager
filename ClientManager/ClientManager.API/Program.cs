@@ -33,10 +33,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowClient", policy =>
     {
-        policy
-            .WithOrigins("http://localhost:5003") // port Twojego frontu
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+        policy.WithOrigins("http://localhost:5003", "http://host.docker.internal:5003")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
