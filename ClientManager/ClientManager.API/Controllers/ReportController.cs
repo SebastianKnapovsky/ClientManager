@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClientManager.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ReportController : Controller
     {
         private readonly IClientService _clientService;

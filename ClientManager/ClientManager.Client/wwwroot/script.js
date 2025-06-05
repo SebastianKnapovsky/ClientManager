@@ -1,10 +1,23 @@
 ﻿const apiUrl = 'https://localhost:5001/api/Clients';
-const reportUrl = 'https://localhost:5001/api/Report';
+const reportUrl = 'https://localhost:5001/api/Report/download';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadClients();
     document.getElementById('clientForm').addEventListener('submit', handleFormSubmit);
 });
+
+function showForm() {
+    document.getElementById('clientForm').style.display = 'block';
+    document.getElementById('showFormBtn').style.display = 'none';
+}
+
+function cancelForm() {
+    document.getElementById('clientForm').reset();
+    document.getElementById('additionalFields').innerHTML = '';
+    document.getElementById('clientId').value = '';
+    document.getElementById('clientForm').style.display = 'none';
+    document.getElementById('showFormBtn').style.display = 'inline-block';
+}
 
 function addAdditionalFieldInput(name = '', value = '') {
     const container = document.createElement('div');
@@ -28,12 +41,19 @@ async function loadClients() {
     clients.forEach(client => {
         const div = document.createElement('div');
         div.className = 'client-item';
+
+        const additional = client.additionalFields?.map(f =>
+            `<strong>${f.nameField}:</strong> ${f.value}`
+        ).join('<br/>') || '';
+
         div.innerHTML = `
             <strong>${client.name}</strong><br/>
             ${client.address}<br/>
             NIP: ${client.nip}<br/>
+            ${additional}
+            <br/>
             <button onclick='editClient(${JSON.stringify(client)})'>✏️ Edit</button>
-            <button onclick='deleteClient("${client.id}")'>🗑️ Delete</button>
+            <button class="delete" onclick='deleteClient("${client.id}")'>🗑️ Delete</button>
         `;
         list.appendChild(div);
     });
@@ -69,13 +89,12 @@ async function handleFormSubmit(e) {
         });
     }
 
-    e.target.reset();
-    document.getElementById('additionalFields').innerHTML = '';
-    document.getElementById('clientId').value = '';
+    cancelForm();
     loadClients();
 }
 
 function editClient(client) {
+    showForm();
     document.getElementById('clientId').value = client.id;
     document.getElementById('name').value = client.name;
     document.getElementById('address').value = client.address;
@@ -96,5 +115,12 @@ async function generateReport() {
     const res = await fetch(reportUrl);
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
-    window.open(url);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ClientReport.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }

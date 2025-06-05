@@ -4,30 +4,52 @@
     <meta charset="UTF-8">
     <title>Client Manager</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <h1>Client Manager</h1>
+    <div class="header-box">
+        <h1><i class="fas fa-users"></i> Client Manager</h1>
+    </div>
 
-    <form id="clientForm">
+    <div class="top-actions">
+        <button id="showFormBtn" onclick="showForm()">
+            <i class="fas fa-user-plus"></i> Add Client
+        </button>
+        <button id="generateReportBtn" onclick="generateReport()">
+            <i class="fas fa-file-pdf"></i> Export to PDF
+        </button>
+    </div>
+
+    <form id="clientForm" style="display:none;">
         <input type="hidden" id="clientId">
 
-        <label>Name:</label>
-        <input type="text" id="name" required>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+        </div>
 
-        <label>Address:</label>
-        <input type="text" id="address">
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" id="address">
+        </div>
 
-        <label>NIP:</label>
-        <input type="text" id="nip">
+        <div class="form-group">
+            <label for="nip">NIP:</label>
+            <input type="text" id="nip">
+        </div>
 
         <div id="additionalFields"></div>
 
-        <button type="button" onclick="addAdditionalField()">+ Add Additional Field</button>
-        <button type="submit">Save Client</button>
+        <div class="form-buttons">
+            <button type="button" onclick="addAdditionalFieldInput()">+ Add Additional Field</button>
+            <div>
+                <button type="button" class="cancel" onclick="cancelForm()">❌ Cancel</button>
+                <button type="submit">Save Client</button>
+            </div>
+        </div>
     </form>
 
-    <button id="generateReportBtn" onclick="generateReport()">📄 Generate report PDF</button>
 
     <h2>Client List</h2>
     <div id="clientList"></div>
