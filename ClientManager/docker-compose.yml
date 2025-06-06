@@ -6,10 +6,10 @@ services:
     ports:
       - "5001:5001"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:5001
     volumes:
-      - ./ClientManager.API/Data:/app/Data
+      - ./ClientManager.Infrastructure/DataStorage:/app/Data
 
   client:
     build:
