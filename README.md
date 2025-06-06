@@ -75,12 +75,17 @@ The solution is organized into multiple layers, following Clean Architecture pri
 
 ## 🐳 Running with Docker
 
-1. **Build and run the containers**  
+1. **Generate migrations and update database**  
+   ```bash
+   dotnet ef migrations add InitialCreate --project ClientManager.Infrastructure --startup-project ClientManager.API
+   dotnet ef database update --project ClientManager.Infrastructure --startup-project ClientManager.API
+   ```
+2. **Build and run the containers**  
    ```bash
    docker-compose up --build
    ```
 
-2. **Available at:**
+3. **Available at:**
    - Frontend → http://localhost:5003  
    - API & Swagger → http://localhost:5001/swagger  
 
@@ -114,18 +119,6 @@ dotnet test
 - `Microsoft.NET.Test.Sdk`
 
 ---
-
-## 📁 Folder Structure
-
-```
-ClientManager/
-│
-├── ClientManager.API/             # Web API (controllers, middleware)
-├── ClientManager.Client/          # Static frontend (HTML, JS, CSS)
-├── ClientManager.Core/            # DTOs, models, interfaces
-├── ClientManager.Infrastructure/  # Repositories, services, SQLite
-├── ClientManager.Tests/           # Unit tests
-└── docker-compose.yml             # Docker configuration
 ```
 
 ---
